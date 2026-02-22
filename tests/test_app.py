@@ -117,3 +117,15 @@ def test_404_error_handler(client):
     assert rv.status_code == 404
     data = rv.get_json()
     assert 'error' in data
+
+
+def test_get_stats(client):
+    """Test the stats endpoint."""
+    rv = client.get('/api/todos/stats')
+    assert rv.status_code == 200
+    data = rv.get_json()
+    assert 'total' in data
+    assert 'completed' in data
+    assert 'pending' in data
+    assert 'completion_rate' in data
+    assert data['total'] > 0

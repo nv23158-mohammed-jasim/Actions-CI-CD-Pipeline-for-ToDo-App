@@ -33,6 +33,20 @@ def get_todos():
     return jsonify(list(todos.values())), 200
 
 
+@app.route('/api/todos/stats', methods=['GET'])
+def get_stats():
+    """Get todo statistics."""
+    total = len(todos)
+    completed = sum(1 for todo in todos.values() if todo['completed'])
+    pending = total - completed
+    return jsonify({
+        'total': total,
+        'completed': completed,
+        'pending': pending,
+        'completion_rate': (completed / total * 100) if total > 0 else 0
+    }), 200
+
+
 @app.route('/api/todos', methods=['POST'])
 def create_todo():
     """Create a new todo."""
